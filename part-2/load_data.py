@@ -87,13 +87,13 @@ def normal_collate_fn(batch):
     encoder_ids = pad_sequence(encoder_inputs, batch_first=True, padding_value=PAD_IDX)
     encoder_mask = pad_sequence(encoder_masks, batch_first=True, padding_value=0)
     
-    decoder_inputs = [output[:-1] for output in decoder_outputs]
-    decoder_targets = [output[1:] for output in decoder_outputs]
+    decoder_inputs = [torch.cat([torch.tensor([PAD_IDX]), output[:-1]]) for output in decoder_outputs]
+    decoder_targets = decoder_outputs
     
     decoder_input_ids = pad_sequence(decoder_inputs, batch_first=True, padding_value=PAD_IDX)
     decoder_target_ids = pad_sequence(decoder_targets, batch_first=True, padding_value=PAD_IDX)
     
-    initial_decoder_inputs = torch.tensor([[output[0]] for output in decoder_outputs])
+    initial_decoder_inputs = torch.full((len(batch), 1), PAD_IDX, dtype=torch.long)
     
     return encoder_ids, encoder_mask, decoder_input_ids, decoder_target_ids, initial_decoder_inputs
 
