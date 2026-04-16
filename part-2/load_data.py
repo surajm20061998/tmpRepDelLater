@@ -32,7 +32,7 @@ class T5Dataset(Dataset):
 
     def process_data(self, data_folder, split, tokenizer):
         nl_path = os.path.join(data_folder, f'{split}.nl')
-        nl_queries = [line.strip() for line in open(nl_path, 'r').readlines()]
+        nl_queries = ["translate English to SQL: " + line.strip() for line in open(nl_path, 'r').readlines()]
         
         encoder_inputs = tokenizer(nl_queries, add_special_tokens=True)
         
